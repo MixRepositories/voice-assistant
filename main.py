@@ -23,6 +23,7 @@ def setup_assistant_voice():
     """
     voices = tts.getProperty("voices")
 
+    print('assistant.speech_language', assistant.speech_language)
     if assistant.speech_language == "en":
         assistant.recognition_language = "en-US"
         if assistant.sex == "female":
@@ -33,8 +34,12 @@ def setup_assistant_voice():
             tts.setProperty("voice", voices[2].id)
     else:
         assistant.recognition_language = "ru-RU"
+        voice_index = 0
+        for index in range(len(voices)):
+            if voices[index].name == 'russian':
+                voice_index = index
         # Microsoft Irina Desktop - Russian
-        tts.setProperty("voice", voices[0].id)
+        tts.setProperty("voice", voices[voice_index].id)
 
 
 def play_voice_assistant_speech(text):
@@ -137,11 +142,13 @@ if __name__ == "__main__":
         # старт записи речи с последующим выводом распознанной речи
         # и удалением записанного в микрофон аудио
         voice_input = record_and_recognize_audio()
-
+        print(voice_input)
         if voice_input == "запуск crm api":
+            play_voice_assistant_speech('Запускаю программу crm api')
             os.system('webstorm ~/Projects/work/MyGig/services/crm-backend/ &')
         elif voice_input == "запуск crm front":
+            play_voice_assistant_speech('Запускаю программу crm frontend')
             os.system('webstorm ~/Projects/work/MyGig/services/crm-frontend/ &')
-        elif voice_input == "привет":
-            play_voice_assistant_speech("Привет")
-
+        elif voice_input == "запуск postman":
+            play_voice_assistant_speech('Запускаю программу postman')
+            os.system('postman &')
